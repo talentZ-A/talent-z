@@ -30,8 +30,15 @@ export function Navbar() {
       <div className="container flex h-16 lg:h-[4.2rem] items-center transition-all duration-300">
         <div className="mr-4 flex">
           <Link href="/" className="flex items-center space-x-2">
-            <Image src="https://cdn.jsdelivr.net/gh/Ethereumistic/obshtini/logo/logo.svg" alt="Logo" width={120} height={64} className="" />
-          </Link>
+          <Image 
+              src="https://cdn.jsdelivr.net/gh/Ethereumistic/obshtini/logo/logo.svg" 
+              alt="Logo" 
+              width={120} 
+              height={40} // Adjusted to maintain aspect ratio
+              priority // Add priority since it's above the fold
+              className="" // Add this to maintain aspect ratio
+            />
+            </Link>
         </div>
         <Separator orientation="vertical" className="mx-2 h-6" />
         <nav className="hidden lg:flex md:flex-1 md:items-center md:justify-start md:gap-1 lg:gap-2">

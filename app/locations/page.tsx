@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { cities, getAllLocations, searchLocations, type Location } from "@/app/data/locations"
+import { type Location, type City } from "@/types/locations"
 import { LocationSidebar } from "@/components/Map/location-sidebar"
 import { MapWrapper } from "@/components/Map/map-wrapper"
 
@@ -12,20 +12,46 @@ import "react-leaflet-cluster/lib/assets/MarkerCluster.Default.css"
 
 export default function LocationsPage() {
   const [searchQuery, setSearchQuery] = useState("")
-  const [filteredLocations, setFilteredLocations] = useState<Location[]>(getAllLocations())
+  const [cities, setCities] = useState<City[]>([])
+  const [filteredLocations, setFilteredLocations] = useState<Location[]>([])
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(null)
-  const [filteredCities, setFilteredCities] = useState(cities)
+  const [filteredCities, setFilteredCities] = useState<City[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  // Fetch locations from Google Sheets
+  useEffect(() => {
+    async function fetchLocations() {
+      try {
+        const response = await fetch('/api/locations')
+        if (!response.ok) {
+          throw new Error('Failed to fetch locations')
+        }
+        const data = await response.json()
+        setCities(data.cities)
+        setFilteredCities(data.cities)
+        setFilteredLocations(data.cities.flatMap((city: City) => city.locations))
+      } catch (err) {
+        console.error('Error fetching locations:', err)
+        setError(err instanceof Error ? err.message : 'Failed to load locations')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchLocations()
+  }, [])
 
   // Enhanced search functionality
   useEffect(() => {
+    if (!cities.length) return
+
     if (searchQuery) {
       const query = searchQuery.toLowerCase()
-      const results = searchLocations(query)
-      setFilteredLocations(results)
 
       // Filter cities and their locations
       const filteredCitiesList = cities
-        .map((city) => ({
+        .map((city: City) => ({
           ...city,
           locations: city.locations.filter(
             (loc) =>
@@ -49,25 +75,36 @@ export default function LocationsPage() {
         })
 
       setFilteredCities(filteredCitiesList)
-
-      const allMatchingLocations = new Set([
-        ...results,
-        ...filteredCitiesList
-          .filter(city => city.name.toLowerCase().includes(query))
-          .flatMap(city => city.locations)
-      ])
-
-      setFilteredLocations(Array.from(allMatchingLocations))
+      setFilteredLocations(Array.from(new Set(filteredCitiesList.flatMap(city => city.locations))))
     } else {
-      setFilteredLocations(getAllLocations())
       setFilteredCities(cities)
+      setFilteredLocations(cities.flatMap(city => city.locations))
     }
-  }, [searchQuery])
+  }, [searchQuery, cities])
+
+  if (error) {
+    return (
+      <div className="py-6 mx-4">
+        <div className="text-center text-red-500">
+          <h2 className="text-xl font-semibold">Error Loading Locations</h2>
+          <p>{error}</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (isLoading) {
+    return (
+      <div className="py-6 mx-4">
+        <div className="text-center">
+          <h2 className="text-xl font-semibold">Loading Locations...</h2>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="py-6 mx-4">
-      {/* <h1 className="text-3xl font-bold mb-6">Локации на контейнери</h1> */}
-
       <div className="grid grid-cols-1 md:grid-cols-10 gap-6">
         <div className="md:col-span-2">
           <h2 className="text-xl font-semibold mb-4">Градове</h2>
@@ -90,4 +127,3 @@ export default function LocationsPage() {
     </div>
   )
 }
-
