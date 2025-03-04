@@ -87,3 +87,5 @@ export function LocationMap({ locations, selectedLocation, onMarkerClick }: Loca
   )
 }
 
+export default LocationMap
+

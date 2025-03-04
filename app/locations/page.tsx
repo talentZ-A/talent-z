@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { cities, getAllLocations, searchLocations, type Location } from "@/app/data/locations"
 import { LocationSidebar } from "@/components/Map/location-sidebar"
-import { LocationMap } from "@/components/Map/location-map"
+import { MapWrapper } from "@/components/Map/map-wrapper"
 
 // Import Leaflet CSS
 import "leaflet/dist/leaflet.css"
@@ -27,7 +27,6 @@ export default function LocationsPage() {
       const filteredCitiesList = cities
         .map((city) => ({
           ...city,
-          // Keep locations that match the search query OR if the city name matches
           locations: city.locations.filter(
             (loc) =>
               loc.name.toLowerCase().includes(query) ||
@@ -35,12 +34,10 @@ export default function LocationsPage() {
               city.name.toLowerCase().includes(query)
           ),
         }))
-        // Only keep cities that have matching locations OR if the city name matches
         .filter((city) => 
           city.locations.length > 0 || 
           city.name.toLowerCase().includes(query)
         )
-        // If city name matches but has no matching locations, include all locations
         .map(city => {
           if (city.name.toLowerCase().includes(query) && city.locations.length === 0) {
             return {
@@ -53,7 +50,6 @@ export default function LocationsPage() {
 
       setFilteredCities(filteredCitiesList)
 
-      // Update filtered locations to include all locations from matching cities
       const allMatchingLocations = new Set([
         ...results,
         ...filteredCitiesList
@@ -84,7 +80,7 @@ export default function LocationsPage() {
         </div>
 
         <div className="md:col-span-8">
-          <LocationMap
+          <MapWrapper
             locations={filteredLocations}
             selectedLocation={selectedLocation}
             onMarkerClick={setSelectedLocation}
