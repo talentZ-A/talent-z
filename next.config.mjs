@@ -13,19 +13,25 @@ const nextConfig = {
         })
       );
 
-      // Modify the CSS rule to use MiniCssExtractPlugin.loader
-      const cssRule = config.module.rules.find(
-        (rule) => rule.test && rule.test.test('.css')
-      );
-      
-      if (cssRule) {
-        cssRule.use = [
-          MiniCssExtractPlugin.loader,
-          ...cssRule.use.filter((loader) => 
-            typeof loader === 'object' && !loader.loader?.includes('style-loader')
-          ),
-        ];
-      }
+      // Find and modify the CSS rule
+      const cssRules = config.module.rules.find(
+        (rule) => typeof rule.oneOf === 'object'
+      )?.oneOf?.filter(
+        (rule) => Array.isArray(rule.use) && 
+        rule.use.some(use => use.loader?.includes('css-loader'))
+      ) ?? [];
+
+      cssRules.forEach(rule => {
+        if (Array.isArray(rule.use)) {
+          rule.use = [
+            MiniCssExtractPlugin.loader,
+            ...rule.use.filter(loader => 
+              typeof loader === 'object' && 
+              !loader.loader?.includes('style-loader')
+            ),
+          ];
+        }
+      });
     }
     
     return config;

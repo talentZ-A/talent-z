@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from "react"
 import type { Location } from "@/app/data/locations"
 import dynamic from "next/dynamic"
+import { Icon } from 'leaflet';
 
 // Dynamically import Leaflet components to avoid SSR issues
 const MapContainer = dynamic(() => import("react-leaflet").then((mod) => mod.MapContainer), { ssr: false })
@@ -15,6 +16,11 @@ const Popup = dynamic(() => import("react-leaflet").then((mod) => mod.Popup), { 
 
 // For the map control
 const MapComponent = dynamic(() => import("./map-controls").then((mod) => mod.MapControls), { ssr: false })
+
+const customIcon = new Icon({
+    iconUrl: "https://cdn.jsdelivr.net/gh/Ethereumistic/obshtini/locations/pin.png",
+    iconSize: [34, 34]
+  })
 
 // Center of Bulgaria
 const DEFAULT_CENTER: [number, number] = [42.733883, 25.48583]
@@ -52,7 +58,7 @@ export function LocationMap({ locations, selectedLocation, onMarkerClick }: Loca
         ref={mapRef}
       >
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          attribution=''
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
@@ -60,6 +66,7 @@ export function LocationMap({ locations, selectedLocation, onMarkerClick }: Loca
           <Marker
             key={location.id}
             position={location.coordinates}
+            icon={customIcon}
             eventHandlers={{
               click: () => onMarkerClick(location),
             }}
