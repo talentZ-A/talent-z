@@ -107,7 +107,6 @@ export default function LocationsPage() {
     <div className="py-6 mx-4">
       <div className="grid grid-cols-1 md:grid-cols-10 gap-6">
         <div className="md:col-span-2">
-          <h2 className="text-xl font-semibold mb-4">Градове</h2>
           <LocationSidebar
             cities={filteredCities}
             onLocationSelect={setSelectedLocation}

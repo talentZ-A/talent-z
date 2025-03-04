@@ -2,7 +2,7 @@
 
 import { Suspense } from "react"
 import dynamic from "next/dynamic"
-import type { Location } from "@/app/data/locations"
+import { type Location, type City } from "@/types/locations"
 import { Skeleton } from "@/components/ui/skeleton"
 
 // Dynamically import the LocationMap component with no SSR

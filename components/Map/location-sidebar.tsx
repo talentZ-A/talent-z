@@ -2,11 +2,18 @@
 
 import { useState } from "react"
 import { MapPin } from "lucide-react"
-import type { City, Location } from "@/app/data/locations"
+import { toast } from 'sonner'
+import { type Location, type City } from "@/types/locations"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/Map/scroll-area"
 import { SearchBox } from "./search-box"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 interface LocationSidebarProps {
   cities: City[]
@@ -17,7 +24,6 @@ interface LocationSidebarProps {
 
 export function LocationSidebar({ cities, onLocationSelect, selectedLocation, onSearch }: LocationSidebarProps) {
   const [expandedCities, setExpandedCities] = useState<string[]>([])
-  
 
   const handleCityToggle = (cityName: string) => {
     setExpandedCities((prev) =>
@@ -25,7 +31,17 @@ export function LocationSidebar({ cities, onLocationSelect, selectedLocation, on
     )
   }
 
-  
+  const handleLocationClick = (location: Location) => {
+    onLocationSelect(location)
+    const [lat, lng] = location.coordinates
+    const textToCopy = `${location.address}\nКоординати: ${lat}, ${lng}`
+    
+    navigator.clipboard.writeText(textToCopy).then(() => {
+      toast.success('Копирано в клипборда')
+    }).catch(() => {
+      toast.error('Неуспешно копиране')
+    })
+  }
 
   return (
     <div className="flex flex-col gap-4">
@@ -40,18 +56,29 @@ export function LocationSidebar({ cities, onLocationSelect, selectedLocation, on
               <AccordionContent>
                 <div className="flex flex-col gap-2 py-2">
                   {city.locations.map((location) => (
-                    <Button
-                      key={location.id}
-                      variant={selectedLocation?.id === location.id ? "default" : "outline"}
-                      className="justify-start h-auto py-3 px-4 text-left"
-                      onClick={() => onLocationSelect(location)}
-                    >
-                      <MapPin className="mr-2 h-4 w-4 shrink-0" />
-                      <div className="flex flex-col items-start">
-                        <span className="font-medium">{location.name}</span>
-                        <span className="text-xs text-muted-foreground">{location.address}</span>
-                      </div>
-                    </Button>
+                          <Button
+                          key={location.id}
+                          variant={selectedLocation?.id === location.id ? "default" : "outline"}
+                          className="justify-start h-auto py-3 px-4 text-left w-full"
+                          onClick={() => handleLocationClick(location)}
+                        >
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger>
+                          <MapPin className="mr-2 h-4 w-4 shrink-0" />
+                          </TooltipTrigger>
+                              <TooltipContent>
+                                <p>Копирай адресът</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                          <div className="flex flex-col w-full">
+                            <span className="font-medium text-wrap">{location.address}</span>
+                            <div className="flex justify-end w-full">
+                              <span className="text-xs text-muted-foreground">{location.coordinates}</span>
+                            </div>
+                          </div>
+                        </Button>
                   ))}
                 </div>
               </AccordionContent>
@@ -62,4 +89,3 @@ export function LocationSidebar({ cities, onLocationSelect, selectedLocation, on
     </div>
   )
 }
-

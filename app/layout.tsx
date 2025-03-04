@@ -2,6 +2,7 @@ import "./globals.css"
 import { Geist, Geist_Mono } from "next/font/google"
 import { Navbar } from "@/components/Navbar/navbar"
 import { ThemeProvider } from "@/components/Theme/theme-provider"
+import { Toaster } from 'sonner'
 
 // Initialize fonts
 const geist = Geist({
@@ -30,6 +31,7 @@ export default function RootLayout({
         >
           <Navbar />
           {children}
+          <Toaster position="bottom-left" />
         </ThemeProvider>
       </body>
     </html>
