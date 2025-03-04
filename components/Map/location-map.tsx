@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState, useRef } from "react"
-import { type Location, type City } from "@/types/locations"
+import { type Location } from "@/types/locations"
 import dynamic from "next/dynamic"
 import { Icon } from 'leaflet';
 

@@ -46,7 +46,7 @@ export function LocationSidebar({ cities, onLocationSelect, selectedLocation, on
   return (
     <div className="flex flex-col gap-4">
       <SearchBox onSearch={onSearch} placeholder="Търсене на локации..." />
-      <ScrollArea className="h-[calc(100vh-16rem)] px-4">
+      <ScrollArea className="h-[calc(100vh-16rem)] pr-6">
         <Accordion type="multiple" value={expandedCities} className="w-full">
           {cities.map((city) => (
             <AccordionItem key={city.name} value={city.name}>

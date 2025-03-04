@@ -2,7 +2,7 @@
 
 import { useEffect } from "react"
 import { useMap } from "react-leaflet"
-import type { Location } from "@/app/data/locations"
+import { type Location } from "@/types/locations"
 
 interface MapControlsProps {
   selectedLocation: Location | null
