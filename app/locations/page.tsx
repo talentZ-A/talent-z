@@ -9,6 +9,7 @@ import { MapWrapper } from "@/components/Map/map-wrapper"
 import "leaflet/dist/leaflet.css"
 import "react-leaflet-cluster/lib/assets/MarkerCluster.css"
 import "react-leaflet-cluster/lib/assets/MarkerCluster.Default.css"
+import { Skeleton } from "@/components/ui/skeleton"
 
 export default function LocationsPage() {
   const [searchQuery, setSearchQuery] = useState("")
@@ -97,7 +98,8 @@ export default function LocationsPage() {
     return (
       <div className="py-6 mx-4">
         <div className="text-center">
-          <h2 className="text-xl font-semibold">Loading Locations...</h2>
+          {/* <h2 className="text-xl font-semibold">Loading Locations...</h2> */}
+          <Skeleton className="w-10 h-10" />
         </div>
       </div>
     )
