@@ -76,7 +76,7 @@ export function TextileRecyclingInfographic() {
   const [activeTab, setActiveTab] = useState("impact")
 
   return (
-    <section className="py-16 px-4 md:px-6 lg:px-8 bg-gradient-to-b from-white to-gray-50">
+    <section className="py-16 px-4 md:px-6 lg:px-8 ">
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -157,7 +157,15 @@ export function TextileRecyclingInfographic() {
                 </CardHeader>
                 <CardContent>
                   <div className="h-[400px]">
-                    <ChartContainer>
+                    <ChartContainer
+                      config={textileWasteData.reduce(
+                        (acc, item) => {
+                          acc[item.name] = { color: item.color }
+                          return acc
+                        },
+                        {} as Record<string, { color: string }>,
+                      )}
+                    >
                       <ResponsiveContainer width="100%" height="100%">
                         <PieChart>
                           <Pie
@@ -178,13 +186,14 @@ export function TextileRecyclingInfographic() {
                         </PieChart>
                       </ResponsiveContainer>
                     </ChartContainer>
-                    <ChartLegend
-                      className="mt-4 justify-center"
-                      items={textileWasteData.map((item) => ({
-                        name: item.name,
-                        color: item.color,
-                      }))}
-                    />
+                    <div className="mt-4 flex justify-center gap-4">
+                      {textileWasteData.map((item, index) => (
+                        <div key={index} className="flex items-center gap-2">
+                          <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }} />
+                          <span className="text-sm text-muted-foreground">{item.name}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </CardContent>
               </Card>
