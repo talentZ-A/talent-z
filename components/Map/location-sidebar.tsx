@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Copy, MapPin } from "lucide-react"
+import { Copy, MapPin, LocateFixed } from "lucide-react"
 import { toast } from 'sonner'
 import { type Location, type City } from "@/types/locations"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
@@ -24,6 +24,7 @@ interface LocationSidebarProps {
 
 export function LocationSidebar({ cities, onLocationSelect, selectedLocation, onSearch }: LocationSidebarProps) {
   const [expandedCities, setExpandedCities] = useState<string[]>([])
+  const [isLocating, setIsLocating] = useState(false)
 
   const handleCityToggle = (cityName: string) => {
     setExpandedCities((prev) =>
@@ -36,7 +37,7 @@ export function LocationSidebar({ cities, onLocationSelect, selectedLocation, on
   }
 
   const handleCopyAddress = (e: React.MouseEvent, address: string) => {
-    e.stopPropagation() // Prevent triggering the main button click
+    e.stopPropagation()
     navigator.clipboard.writeText(address).then(() => {
       toast.success('Адресът е копиран')
     }).catch(() => {
@@ -45,7 +46,7 @@ export function LocationSidebar({ cities, onLocationSelect, selectedLocation, on
   }
 
   const handleCopyCoordinates = (e: React.MouseEvent, coordinates: [number, number]) => {
-    e.stopPropagation() // Prevent triggering the main button click
+    e.stopPropagation()
     const [lat, lng] = coordinates
     const coordText = `${lat}, ${lng}`
     navigator.clipboard.writeText(coordText).then(() => {
@@ -55,25 +56,111 @@ export function LocationSidebar({ cities, onLocationSelect, selectedLocation, on
     })
   }
 
+  const findNearestLocation = () => {
+    setIsLocating(true)
+    
+    if (!navigator.geolocation) {
+      toast.error("Геолокацията не се поддържа от вашия браузър")
+      setIsLocating(false)
+      return
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const userLat = position.coords.latitude
+        const userLng = position.coords.longitude
+
+        // Get all locations from all cities
+        const allLocations = cities.flatMap(city => city.locations)
+
+        // Find the nearest location using Haversine formula
+        let nearestLocation = allLocations[0]
+        let shortestDistance = calculateDistance(
+          userLat,
+          userLng,
+          allLocations[0].coordinates[0],
+          allLocations[0].coordinates[1]
+        )
+
+        allLocations.forEach((location) => {
+          const distance = calculateDistance(
+            userLat,
+            userLng,
+            location.coordinates[0],
+            location.coordinates[1]
+          )
+          if (distance < shortestDistance) {
+            shortestDistance = distance
+            nearestLocation = location
+          }
+        })
+
+        // Select the nearest location
+        onLocationSelect(nearestLocation)
+        toast.success("Намерена най-близка локация!")
+        setIsLocating(false)
+      },
+      (error) => {
+        toast.error("Грешка при определяне на местоположението")
+        setIsLocating(false)
+      },
+      { enableHighAccuracy: true }
+    )
+  }
+
+  // Haversine formula to calculate distance between two points
+  const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
+    const R = 6371 // Earth's radius in kilometers
+    const dLat = toRad(lat2 - lat1)
+    const dLon = toRad(lon2 - lon1)
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2)
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+    return R * c
+  }
+
+  const toRad = (value: number) => {
+    return (value * Math.PI) / 180
+  }
+
   return (
     <div className="flex flex-col gap-4">
-      <SearchBox onSearch={onSearch} placeholder="Търсене на локации..." />
+      <div className="flex items-center gap-2">
+        <div className="flex-1">
+          <SearchBox onSearch={onSearch} placeholder="Търсене на локации..." />
+        </div>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-10 w-10"
+                onClick={findNearestLocation}
+                disabled={isLocating}
+              >
+                <LocateFixed className={`h-5 w-5 ${isLocating ? 'animate-pulse text-primary' : ''}`} />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Намери най-близката локация</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
       <ScrollArea className="h-[calc(100vh-15rem)] pr-6">
         <Accordion type="multiple" value={expandedCities} className="w-full">
-          
           {cities.map((city) => (
             <AccordionItem key={city.name} value={city.name}>
               <AccordionTrigger onClick={() => handleCityToggle(city.name)} className="text-lg font-medium pl-3 py-3">
-                <div className="flex items-end  gap-2">
+                <div className="flex items-end gap-2">
                   {city.name}
-
-              <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-secondary text-primary  text-sm font-medium">
+                  <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-secondary text-primary text-sm font-medium">
                     {city.locations.length}
-              </span>
+                  </span>
                 </div>
-
               </AccordionTrigger>
-              
               <AccordionContent>
                 <div className="flex flex-col gap-2 py-2">
                   {city.locations.map((location) => (
@@ -88,7 +175,7 @@ export function LocationSidebar({ cities, onLocationSelect, selectedLocation, on
                           <TooltipTrigger asChild>
                             <button 
                               onClick={(e) => handleCopyAddress(e, location.address)}
-                              className=""
+                              className={selectedLocation?.id === location.id ? "text-green-500" : "hover:text-primary transition-colors"}
                             >
                               <MapPin className="mr-2 h-4 w-4 shrink-0" />
                             </button>
@@ -109,7 +196,7 @@ export function LocationSidebar({ cities, onLocationSelect, selectedLocation, on
                           <TooltipTrigger asChild>
                             <button 
                               onClick={(e) => handleCopyCoordinates(e, location.coordinates)}
-                              className=""
+                              className={selectedLocation?.id === location.id ? "text-green-500" : "hover:text-primary transition-colors"}
                             >
                               <Copy className="ml-2 h-4 w-4 shrink-0" />
                             </button>

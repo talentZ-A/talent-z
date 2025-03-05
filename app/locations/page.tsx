@@ -98,8 +98,8 @@ export default function LocationsPage() {
     return (
       <div className="py-6 mx-4">
         <div className="text-center">
-          {/* <h2 className="text-xl font-semibold">Loading Locations...</h2> */}
-          <Skeleton className="w-10 h-10" />
+          <h2 className="text-xl font-semibold">Loading Locations...</h2>
+
         </div>
       </div>
     )
@@ -107,8 +107,8 @@ export default function LocationsPage() {
 
   return (
     <div className="py-6 mx-4">
-      <div className="grid grid-cols-1 md:grid-cols-10 gap-6">
-        <div className="md:col-span-2">
+      <div className="grid grid-cols-1 md:grid-cols-12  xl:grid-cols-10 gap-6">
+        <div className="md:col-span-4 xl:col-span-2">
           <LocationSidebar
             cities={filteredCities}
             onLocationSelect={setSelectedLocation}
@@ -117,7 +117,7 @@ export default function LocationsPage() {
           />
         </div>
 
-        <div className="md:col-span-8">
+        <div className="md:col-span-8 xl:col-span-8">
           <MapWrapper
             locations={filteredLocations}
             selectedLocation={selectedLocation}

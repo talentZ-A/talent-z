@@ -30,6 +30,7 @@ export function SearchBox({ onSearch, placeholder = "Търсене на лок�
         value={query}
         onChange={(e) => setQuery(e.target.value)}
       />
+
     </div>
   )
 }

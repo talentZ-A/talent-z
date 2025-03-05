@@ -69,8 +69,9 @@ export function Hero() {
       >
         <Button 
           size="lg" 
-          variant='destructive' 
-          className="text-lg px-8 py-6 bg-primary hover:bg-primary/90 transition-colors"
+          variant='outline' 
+          className="text-lg px-8 py-6 bg-white/10 hover:bg-white/20 
+                    transition-colors border-white text-white backdrop-blur"
           asChild
         >
           <Link href="/recycling">Рециклиране на Текстил</Link>
@@ -86,8 +87,9 @@ export function Hero() {
         >
           <Button 
             size="lg" 
-            variant='destructive' 
-            className="text-lg px-8 py-6 bg-primary hover:bg-primary/90 transition-colors"
+            variant='outline' 
+            className="text-lg px-8 py-6 bg-white/10  hover:bg-white/20
+                      transition-colors text-white border border-white backdrop-blur"
             asChild
           >
             <Link href="/recycling">Рециклиране на Текстил</Link>
