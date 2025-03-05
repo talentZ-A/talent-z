@@ -69,7 +69,7 @@
     --input: oklch(0.922 0 0);
     --ring: oklch(0.708 0 0);
     --radius: 0.625rem;
-    --green: oklch(59.93% 0.1336 140.74);
+    --ggreen: oklch(59.93% 0.1336 140.74);
   }
 
   .dark {
@@ -92,7 +92,7 @@
     --border: oklch(0.269 0 0);
     --input: oklch(0.269 0 0);
     --ring: oklch(0.439 0 0);
-    --green: oklch(86.8% 0.1539 128.3);
+    --ggreen: oklch(86.8% 0.1539 128.3);
 
   }
 }

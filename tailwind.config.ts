@@ -24,7 +24,7 @@ const config = {
         ring: "var(--ring)",
         background: "var(--background)",
         foreground: "var(--foreground)",
-        green: "var(--green)",
+        ggreen: "var(--ggreen)",
         primary: {
           DEFAULT: "var(--primary)",
           foreground: "var(--primary-foreground)",

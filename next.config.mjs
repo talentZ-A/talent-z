@@ -4,6 +4,15 @@ const nextConfig = {
   webpack: (config) => {
     return config;
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'cdn.jsdelivr.net',
+        port: '',
+      },
+    ],
+  },
 };
 
 export default nextConfig; 
