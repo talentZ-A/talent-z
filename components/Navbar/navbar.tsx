@@ -26,7 +26,7 @@ export function Navbar() {
 
   return (
     // <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-    <header className="sticky top-0 z-[5000] w-full border-b bg-white/80 dark:bg-black/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-[5000] w-full border-b bg-white/70 dark:bg-black/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 lg:h-[4.2rem] items-center transition-all duration-300">
         <div className="mr-4 flex">
           <Link href="/" className="flex items-center space-x-2">
