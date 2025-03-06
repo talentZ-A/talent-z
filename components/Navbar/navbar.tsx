@@ -6,8 +6,7 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { MobileNav } from "./mobile-nav"
-import { LanguageSelector } from "@/components/ui/language-selector"
-import { ThemeToggle } from "@/components/Theme/theme-toggle"
+import { useAuthStore } from "@/lib/store"
 import { SearchBox } from "./search-box"
 
 const navItems = [
@@ -19,12 +18,22 @@ const navItems = [
 export function Navbar() {
   const pathname = usePathname()
   const router = useRouter()
+  const { user, logout } = useAuthStore()
   const isTalentsPage = pathname === "/talents" || pathname.startsWith("/talents/")
 
   const handleSearch = (query: string) => {
     // In a real app, this would navigate to a search results page
     // or filter the talents on the current page
     console.log("Searching for:", query)
+  }
+
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/auth/logout", { method: "POST" })
+      logout()
+    } catch (error) {
+      console.error("Logout failed:", error)
+    }
   }
 
   return (
@@ -57,15 +66,27 @@ export function Navbar() {
           ))}
         </nav>
 
-        {isTalentsPage && (
+        {/* {isTalentsPage && (
           <div className="hidden md:block ml-4 w-full max-w-xs">
             <SearchBox onSearch={handleSearch} placeholder="Search talents..." />
           </div>
-        )}
+        )} */}
 
         <div className="hidden lg:flex ml-auto items-center gap-2">
-          <LanguageSelector />
-          <ThemeToggle />
+          {user ? (
+            <>
+              <Button variant="ghost" asChild>
+                <Link href="/dashboard">Dashboard</Link>
+              </Button>
+              <Button variant="ghost" onClick={handleLogout}>
+                Logout
+              </Button>
+            </>
+          ) : (
+            <Button variant="default" asChild>
+              <Link href="/auth">Login</Link>
+            </Button>
+          )}
         </div>
         <MobileNav navItems={navItems} isTalentsPage={isTalentsPage} />
       </div>
