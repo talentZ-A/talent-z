@@ -8,6 +8,7 @@ import { Separator } from "@/components/ui/separator"
 import { MobileNav } from "./mobile-nav"
 import { useAuthStore } from "@/lib/store"
 import { SearchBox } from "./search-box"
+import { ThemeToggle } from "../Theme/theme-toggle"
 
 const navItems = [
   { title: "Subscription", href: "/subscription" },
@@ -88,6 +89,9 @@ export function Navbar() {
             </Button>
           )}
         </div>
+        {/* <div className="mr-2">
+        <ThemeToggle />
+        </div> */}
         <MobileNav navItems={navItems} isTalentsPage={isTalentsPage} />
       </div>
     </header>

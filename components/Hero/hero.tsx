@@ -74,7 +74,7 @@ export function Hero() {
                     transition-colors border-white text-white backdrop-blur"
           asChild
         >
-          <Link href="/recycling">Get Started</Link>
+          <Link href="/subscription">Get Started</Link>
         </Button>
       </motion.div>
         

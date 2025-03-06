@@ -59,7 +59,7 @@ export default function DashboardPage() {
                 <Alert>
                   <AlertCircle className="h-4 w-4" />
                   <AlertDescription>
-                    You haven't chosen a subscription plan yet. Choose a plan to access all features.
+                    You haven&apos;t chosen a subscription plan yet. Choose a plan to access all features.
                   </AlertDescription>
                 </Alert>
                 <Button
