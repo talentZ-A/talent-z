@@ -10,7 +10,7 @@ export function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [displayText, setDisplayText] = useState("")
   const fullText = "Рециклиране на текстил: Втори живот за стари дрехи, първа стъпка към..."
-  const words = `Рециклиране на текстил: Втори живот за стари дрехи, първа стъпка към...
+  const words = `Are you ready to find your talent?
   `;
   useEffect(() => {
     // Video autoplay
@@ -45,7 +45,7 @@ export function Hero() {
         loop
         playsInline
       >
-        <source src="/background2.webm" type="video/webm" />
+        <source src="/bg.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
 
@@ -74,7 +74,7 @@ export function Hero() {
                     transition-colors border-white text-white backdrop-blur"
           asChild
         >
-          <Link href="/recycling">Рециклиране на Текстил</Link>
+          <Link href="/recycling">Get Started</Link>
         </Button>
       </motion.div>
         
@@ -92,7 +92,7 @@ export function Hero() {
                       transition-colors text-white border border-white backdrop-blur"
             asChild
           >
-            <Link href="/recycling">Рециклиране на Текстил</Link>
+            <Link href="/recycling">Get Started</Link>
           </Button>
         </motion.div>
       </div>

@@ -7,7 +7,7 @@ import { type Location, type City } from "@/types/locations"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/Map/scroll-area"
-import { SearchBox } from "./search-box"
+import { SearchBox } from "../Navbar/search-box"
 import {
   Tooltip,
   TooltipContent,
