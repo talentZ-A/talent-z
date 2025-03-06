@@ -8,11 +8,11 @@ import { getCountryFlag, getGenderSymbol } from "@/lib/utils"
 import { Metadata } from "next"
 import { getTalentBySlug } from "@/lib/talents"
 
-interface TalentPageProps {
+type TalentPageProps = {
   params: {
     slug: string
   }
-  searchParams: { [key: string]: string | string[] | undefined }
+  searchParams: Record<string, string | string[] | undefined>
 }
 
 export async function generateMetadata({ params }: TalentPageProps): Promise<Metadata> {
