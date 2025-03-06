@@ -72,9 +72,9 @@ export function Footer() {
           </div>
 
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Follow Us</h3>
+            {/* <h3 className="text-lg font-semibold">Follow Us</h3> */}
             <div className="flex gap-4">
-              {footerLinks.social.map((social) => (
+              {/* {footerLinks.social.map((social) => (
                 <a
                   key={social.href}
                   href={social.href}
@@ -85,7 +85,7 @@ export function Footer() {
                   <social.icon className="w-5 h-5" />
                   <span className="sr-only">{social.label}</span>
                 </a>
-              ))}
+              ))} */}
             </div>
           </div>
         </div>

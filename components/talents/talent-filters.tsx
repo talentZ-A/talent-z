@@ -90,10 +90,6 @@ export function TalentFilters({ talents, countries }: TalentFiltersProps) {
     })
   }, [talents, searchQuery, selectedGender, selectedCountries])
 
-  // Calculate counts for the tabs
-  const femaleTalents = talents.filter(t => t.gender.toLowerCase() === "female")
-  const maleTalents = talents.filter(t => t.gender.toLowerCase() === "male")
-
   // Calculate counts for each country
   const countryCounts = useMemo(() => {
     return consolidatedCountries.reduce((acc, country) => {
@@ -124,9 +120,9 @@ export function TalentFilters({ talents, countries }: TalentFiltersProps) {
             className="w-full md:w-auto"
           >
             <TabsList>
-              <TabsTrigger value="all">All ({talents.length})</TabsTrigger>
-              <TabsTrigger value="female">Female ({femaleTalents.length})</TabsTrigger>
-              <TabsTrigger value="male">Male ({maleTalents.length})</TabsTrigger>
+              <TabsTrigger value="all">All</TabsTrigger>
+              <TabsTrigger value="female">Female</TabsTrigger>
+              <TabsTrigger value="male">Male</TabsTrigger>
             </TabsList>
           </Tabs>
 

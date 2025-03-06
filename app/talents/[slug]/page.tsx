@@ -2,38 +2,37 @@ import Link from "next/link"
 import Image from "next/image"
 import { ArrowLeft } from "lucide-react"
 import { notFound } from "next/navigation"
-import { fetchTalentsFromSheet } from "@/lib/talent-sheets"
 import { TalentTabs } from "@/components/talents/talent-tabs"
 import { Button } from "@/components/ui/button"
 import { getCountryFlag, getGenderSymbol } from "@/lib/utils"
-import type { Metadata } from "next"
+import { Metadata } from "next"
+import { getTalentBySlug } from "@/lib/talents"
 
 interface TalentPageProps {
   params: {
     slug: string
   }
+  searchParams: { [key: string]: string | string[] | undefined }
 }
 
 export async function generateMetadata({ params }: TalentPageProps): Promise<Metadata> {
-  const talents = await fetchTalentsFromSheet()
-  const talent = talents.find((t) => t.slug === params.slug)
+  const talent = await getTalentBySlug(params.slug)
 
   if (!talent) {
     return {
-      title: "Talent Not Found | TalentZ Vercel",
-      description: "The requested talent could not be found.",
+      title: "Talent Not Found - Talent-Z",
+      description: "The requested talent profile could not be found.",
     }
   }
 
   return {
-    title: `${talent.fullName} | TalentZ Vercel`,
-    description: `View ${talent.fullName}'s profile - ${talent.actingExperience}`,
+    title: `${talent.fullName} - Talent-Z`,
+    description: talent.actingExperience,
   }
 }
 
-export default async function TalentDetailPage({ params }: TalentPageProps) {
-  const talents = await fetchTalentsFromSheet()
-  const talent = talents.find((t) => t.slug === params.slug)
+export default async function TalentPage({ params }: TalentPageProps) {
+  const talent = await getTalentBySlug(params.slug)
 
   if (!talent) {
     notFound()
@@ -54,7 +53,7 @@ export default async function TalentDetailPage({ params }: TalentPageProps) {
         <div className="space-y-4">
           <div className="relative aspect-[3/4] w-full">
             <Image
-              src={talent.image || "/placeholder.svg"}
+              src={talent.image}
               alt={talent.fullName}
               fill
               className="object-cover rounded-lg"

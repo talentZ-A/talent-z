@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { useAuthStore } from "@/lib/store"
-import { AlertCircle } from "lucide-react"
+import { AlertCircle, Check } from "lucide-react"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 
 export default function DashboardPage() {
@@ -79,7 +79,7 @@ export default function DashboardPage() {
                   <div className="text-sm text-muted-foreground">Status</div>
                   <div className="font-medium capitalize">{subscription.status}</div>
                 </div>
-                {subscription.expiresAt && (
+                {subscription?.expiresAt && (
                   <div>
                     <div className="text-sm text-muted-foreground">Expires</div>
                     <div className="font-medium">
@@ -97,10 +97,14 @@ export default function DashboardPage() {
               </>
             ) : (
               <div className="text-center space-y-4">
-                <Alert variant="destructive">
-                  <AlertCircle className="h-4 w-4" />
+                <div>
+                  <div className="text-sm text-muted-foreground mb-2">Current Plan</div>
+                  <div className="font-medium capitalize mb-4">{user.role}</div>
+                </div>
+                <Alert variant="default">
+                  <Check className="h-4 w-4" />
                   <AlertDescription>
-                    Your subscription has expired. Please renew to continue accessing features.
+                    You are a producer! Enjoy the discoveries of new talents!
                   </AlertDescription>
                 </Alert>
                 <Button
